@@ -4,6 +4,7 @@ World::World(sf::Vector2u wnd_size) {
 	//m_blockSize = 16;
 	m_blockSize = 31;
 	m_pic_size = 30;
+	m_appleEaten = false;
 	m_wndSize = wnd_size;
 	RespawnApple();
 	//m_appleShape.setFillColor(sf::Color::Red);
@@ -44,9 +45,11 @@ void World::RespawnApple() {
 	//m_appleShape.setPosition(
 		//m_appleCoord.x * m_blockSize, m_appleCoord.y * m_blockSize);
 	m_appleSprite.setPosition(m_appleCoord.x * m_blockSize, m_appleCoord.y * m_blockSize);
+	m_appleEaten = true;
 }
 
 void World::Update(Snake& player) {
+	m_appleEaten = false;
 	if (player.GetPosition() == m_appleCoord) {
 		player.Extend();
 		player.IncreaseScore();
@@ -87,5 +90,5 @@ void World::Render(sf::RenderWindow& window) {
 
 int World::GetBlockSize() const { return m_blockSize; }
 
-
+bool World::AppleEaten() const { return m_appleEaten; }
 

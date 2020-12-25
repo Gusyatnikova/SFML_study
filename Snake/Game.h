@@ -1,6 +1,7 @@
 #pragma once
 #include "Window.h"
 #include "World.h"
+#include"textbox.h"
 
 
 class Game
@@ -21,5 +22,6 @@ private:
 	Snake m_snake;
 	sf::Clock m_clock;
 	float m_elapsed;
+	TextBox m_textBox;
 };
 

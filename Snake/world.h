@@ -11,6 +11,7 @@ public:
 	int GetBlockSize() const;
 
 	void RespawnApple();
+	bool AppleEaten() const;
 
 	void Update(Snake& player);
 	void Render(sf::RenderWindow& window);
@@ -20,6 +21,7 @@ private:
 	sf::Vector2i m_appleCoord;
 	int m_blockSize;
 	int m_pic_size;
+	bool m_appleEaten;
 	//sf::CircleShape m_appleShape;
 	sf::Texture m_appleTexture;
 	sf::Sprite m_appleSprite;
