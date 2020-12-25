@@ -41,12 +41,8 @@ public:
 private:
 	SnakeContainer m_snake_body;
 	Direction m_dir;
-	sf::RectangleShape m_bodyRect;
-	//textures and sprites for head and body
-	/*sf::Texture m_headTexture;
-	sf::Texture m_bodyTexture;
-	sf::Sprite m_headSprite;
-	sf::Sprite m_body_Sprite;*/
+	//sf::RectangleShape m_bodyRect;
+	sf::CircleShape m_bodyCircle;
 	int m_size;
 	int m_speed;
 	int m_lives;

@@ -19,7 +19,13 @@ private:
 	sf::Vector2u m_wndSize;
 	sf::Vector2i m_appleCoord;
 	int m_blockSize;
-
-	sf::CircleShape m_appleShape;
+	int m_pic_size;
+	//sf::CircleShape m_appleShape;
+	sf::Texture m_appleTexture;
+	sf::Sprite m_appleSprite;
 	sf::RectangleShape m_bounds[4];
+	sf::Texture m_grassTexture;
+	sf::Sprite m_grassSprite;
+	sf::Texture m_treeTexture;
+	sf::Sprite m_treeSprite;
 };
