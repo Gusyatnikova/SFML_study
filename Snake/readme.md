@@ -1,4 +1,4 @@
 ## Snake game based on SFML
 ### Start state 
-![2](https://user-images.githubusercontent.com/29982395/103139199-6be0b400-470c-11eb-8721-a8087ed6cea2.JPG)
+![2](https://user-images.githubusercontent.com/29982395/103139282-21136c00-470d-11eb-814e-bb4903458faf.JPG)
 
