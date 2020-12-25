@@ -7,7 +7,7 @@ m_snake(m_world.GetBlockSize()), m_world(m_window.GetWindowSize())
 	srand(time(NULL));
 	m_elapsed = 0.0f;
 	m_textBox.Setup(5, 22, 400, 
-		{ m_window.GetWindowSize().x - 400.0f, 5.0f }, "../Source/QuirkyRobot.ttf");
+		{ m_window.GetWindowSize().x - 400.0f, 0.0f }, "../Source/QuirkyRobot.ttf");
 }
 
 Game::~Game() {}
