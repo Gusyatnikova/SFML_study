@@ -15,10 +15,11 @@ public:
 	void EndDraw();
 
 	void Update();
+	void Close();
 
-	bool IsDone();
-	bool IsFullScreen();
-	sf::Vector2u GetWindowSize();
+	bool IsDone() const;
+	bool IsFullScreen() const;
+	sf::Vector2u GetWindowSize() const;
 	sf::RenderWindow* GetRenderWindow();
 
 	void ToggleFulScreen();

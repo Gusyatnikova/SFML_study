@@ -2,8 +2,8 @@
 
 World::World(sf::Vector2u wnd_size) {
 	//m_blockSize = 16;
-	m_blockSize = 31;
-	m_pic_size = 30;
+	m_blockSize = 25;
+	m_pic_size = 25;
 	m_appleEaten = false;
 	m_wndSize = wnd_size;
 	RespawnApple();
@@ -74,16 +74,22 @@ void World::Render(sf::RenderWindow& window) {
 	//	window.draw(bound);
 	//}
 
-	for (float i = 0; i < m_wndSize.x - m_pic_size; i += m_pic_size) {
+	for (float i = 0; i <= m_wndSize.x - m_pic_size; i += m_pic_size) {
+		m_treeSprite.setOrigin({ 0.0f, 0.0f });
 		m_treeSprite.setPosition({ i, 0 });
 		window.draw(m_treeSprite);
-		m_treeSprite.setPosition({ i, 1.0f * m_wndSize.y - 30 });
+		m_treeSprite.setOrigin(
+			{ 0.0f, m_treeSprite.getLocalBounds().height });
+		m_treeSprite.setPosition({ i, 1.0f * m_wndSize.y});
 		window.draw(m_treeSprite);
 	}
-	for (float i = 0; i < m_wndSize.y - m_pic_size; i += m_pic_size) {
-		m_treeSprite.setPosition({ 0, i });
+	for (float i = 0; i <= m_wndSize.y - m_pic_size; i += m_pic_size) {
+		m_treeSprite.setOrigin({ 0.0f, 0.0f });
+		m_treeSprite.setPosition({ 0, i }); 
 		window.draw(m_treeSprite);
-		m_treeSprite.setPosition({ 1.0f * m_wndSize.x - 30, i });
+		m_treeSprite.setOrigin(
+			{ m_treeSprite.getLocalBounds().width, 0.0f });
+		m_treeSprite.setPosition({ 1.0f * m_wndSize.x, i });
 		window.draw(m_treeSprite);
 	}
 }

@@ -46,6 +46,10 @@ void Window::Update() {
 	}
 }
 
+void Window::Close() {
+	Destroy();
+}
+
 void Window::ToggleFulScreen() {
 	m_isFullScreen = !m_isFullScreen;
 	Destroy();
@@ -60,11 +64,11 @@ void Window::EndDraw() {
 	m_window.display();
 }
 
-bool Window::IsDone() {
+bool Window::IsDone() const {
 	return m_isDone;
 }
 
-bool Window::IsFullScreen() {
+bool Window::IsFullScreen() const {
 	return m_isFullScreen;
 }
 
@@ -72,7 +76,7 @@ void Window::Draw(sf::Drawable& l_drawable) {
 	m_window.draw(l_drawable);
 }
 
-sf::Vector2u Window::GetWindowSize() {
+sf::Vector2u Window::GetWindowSize() const {
 	return m_windowSize;
 }
 

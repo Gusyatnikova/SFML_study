@@ -2,12 +2,15 @@
 
 int main() {
 	Game game;
-	while (!game.GetWindow()->IsDone()) {
+	while (!game.IsDone()) {
 		game.HandleInput();
 		game.Update();
 		game.Render();
-		game.RestartClock();
+		game.RestartClock();	
 	}
-
+	while (!game.GetWindow()->IsDone()) {
+		game.ShowGameOver();
+		game.Update();
+	}
 	return 0;
 }

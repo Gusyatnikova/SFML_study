@@ -1,13 +1,14 @@
 #include "Game.h"
 
-Game::Game() : m_window("Snake", sf::Vector2u(1000, 750)),
+Game::Game() : m_window("Snake", sf::Vector2u(800, 600)),
 m_snake(m_world.GetBlockSize()), m_world(m_window.GetWindowSize()) 
 {
 	m_clock.restart();
 	srand(time(NULL));
 	m_elapsed = 0.0f;
-	m_textBox.Setup(5, 22, 400, 
+	m_textBox.Setup(1, 22, 400, 
 		{ m_window.GetWindowSize().x - 400.0f, 0.0f }, "../Source/QuirkyRobot.ttf");
+	m_isDone = false;
 }
 
 Game::~Game() {}
@@ -36,13 +37,20 @@ void Game::Update() {
 		m_world.Update(m_snake);
 		m_elapsed -= timeStep;
 		if (m_snake.HasLost()) {
-			m_snake.Reset();
-			m_textBox.Add("You Lose! Score: " + std::to_string(m_snake.GetScore()));
-		}
-		if (m_world.AppleEaten()) {
-			m_textBox.Add("You ate an apple. Score: " + std::to_string(m_snake.GetScore()));
-		}
+			if (m_snake.GetLives() > 0) {
+				m_snake.Reset();
+			}
+			else {
+				m_isDone = true;
+				m_textBox.Clear();
+			}
+		}	
 	}
+	m_textBox.Setup(1, 22, 400,
+		{ m_window.GetWindowSize().x - 200.0f, m_world.GetBlockSize() * 0.9f }, "../Source/QuirkyRobot.ttf");
+	m_textBox.Add(
+		"Score: " + std::to_string(m_snake.GetScore()) +
+		"     Lives: " + std::to_string(m_snake.GetLives()));
 }
 
 void Game::Render() {
@@ -52,6 +60,19 @@ void Game::Render() {
 	m_textBox.Render(*m_window.GetRenderWindow());
 	m_window.EndDraw();
 }
+
+void Game::ShowGameOver() {
+	m_textBox.Setup(1, 40, 400,
+		{ m_window.GetWindowSize().x / 2 - 200.0f , m_window.GetWindowSize().y / 2.0f - 20.0f},
+		"../Source/QuirkyRobot.ttf");
+	m_textBox.Add("       GAME OVER");
+	m_window.BeginDraw();
+	m_world.Render(*m_window.GetRenderWindow());
+	m_textBox.Render(*m_window.GetRenderWindow());
+	m_window.EndDraw();
+}
+
+bool Game::IsDone() const { return (m_isDone || m_window.IsDone()); }
 
 Window* Game::GetWindow() {
 	return &m_window;

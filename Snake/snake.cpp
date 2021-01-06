@@ -2,6 +2,7 @@
 
 Snake::Snake(int blockSize) {
 	m_size = blockSize;
+	m_lives = 3;
 	//m_bodyRect.setSize({ 1.0f * (m_size - 1), 1.0f * (m_size - 1) });
 	m_bodyCircle.setRadius(1.0f * m_size / 2);
 	Reset();
@@ -15,8 +16,8 @@ void Snake::Reset() {
 	m_snake_body.push_back(SnakeSegment(14, 15));
 	m_snake_body.push_back(SnakeSegment(13, 15));
 	m_dir = Direction::NONE;
-	m_speed = 15;
-	m_lives = 3;
+	m_speed = 12;
+	//m_lives = 3;
 	m_score = 0;
 	m_lost = false;
 }
@@ -24,6 +25,19 @@ void Snake::Reset() {
 void Snake::SetDirection(Direction dir) { m_dir = dir; }
 
 Direction Snake::GetDirection() const { return m_dir; }
+
+Direction Snake::GetPhisicalDirection() const {
+	if (m_snake_body.size() < 2) { return Direction::NONE; }
+	const SnakeSegment& head = m_snake_body[0];
+	const SnakeSegment& neck = m_snake_body[1];
+	if (head.position.x == neck.position.x) {
+		return head.position.y > neck.position.y ? Direction::DOWN : Direction::UP;
+	}
+	else if (head.position.y == neck.position.y) {
+		return head.position.x > neck.position.x ? Direction::RIGHT : Direction::LEFT;
+	}
+	return Direction::NONE;
+}
 
 int Snake::GetSpeed() const { return m_speed; }
 
@@ -39,7 +53,7 @@ void Snake::IncreaseScore() { m_score += 10; }
 
 bool Snake::HasLost() const { return m_lost; }
 
-void Snake::Lose() { m_lost = true; }
+void Snake::Lose() { m_lost = true; --m_lives; }
 
 void Snake::ToggleLost() { m_lost = !m_lost; }
 
@@ -137,12 +151,11 @@ void Snake::CheckCollsion() {
 }
 
 void Snake::Cut(int segments_cnt) {
-	//todo: check is it work correct
 	m_snake_body.erase(std::next(m_snake_body.begin(), segments_cnt), m_snake_body.end());
 	--m_lives;
-	if (!m_lives) {
-		Lose();
-	}
+	//if (!m_lives) {
+	//	Lose();
+	//}
 }
 
 void Snake::Render(sf::RenderWindow& wnd) {
