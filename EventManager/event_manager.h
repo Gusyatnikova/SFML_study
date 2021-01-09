@@ -2,8 +2,10 @@
 
 #include <vector>
 #include <unordered_map>
+#include <string>
+#include <functional>
 
-#include "SFML/Window.hpp"
+#include "SFML/Graphics.hpp"
 
 enum class EventType {
 	KeyDown = sf::Event::KeyPressed,
@@ -55,7 +57,7 @@ struct EventDetails {
 };
 
 struct Binding {
-	Binding(const std::string& name)
+	Binding(const std::string& name = "")
 		: m_name(name), m_events_occured(0), m_details(name) {}
 	void BindEvent(EventType event_type, EventInfo event_info = EventInfo()) {
 		m_events.emplace_back(event_type, event_info);
@@ -68,6 +70,47 @@ struct Binding {
 };
 
 using Bindings = std::unordered_map<std::string, Binding*>;
-//-------------------------76---------------------------------//
+
+using Callbacks = std::unordered_map
+	<std::string, std::function<void(EventDetails*)>>;
+
+class EventManager {
+private:
+	Bindings m_bindings;
+	Callbacks m_callbacks;
+	bool m_hasFocus;
+
+	void LoadBindings();
+public:
+	EventManager();
+	~EventManager();
+
+	bool AddBinding(Binding *binding);
+	bool RemoveBinding(const std::string &name);
+
+	void SetFocus(bool focus) { m_hasFocus = focus; }
+
+	template <typename T>
+	bool AddCallback(const std::string &name,
+		void (T::*func)(EventDetails*), T* instance) {
+		//бинд так управл€ет аргументами функции _1 означает первый параметр
+		//если foo(int, int) и f = bind(foo, 101, _1), то f(-10) = foo(101, -10)
+		//сколько указать заполнителей _num, столько и будет нужно аргументов при вызове f
+		auto tmp = std::bind(func, instance, std::placeholders::_1);
+		//emplace return std::pair<std::iterator, bool> 1-ый ук-ет на позицию вставленного эл-та
+		//или сущ-й эл-т если вставки не было. 2-й = 1, если вставка была, иначе 0
+		return m_callbacks.emplace(name, tmp).second;
+	}
+
+	void RemoveCallback(const std::string &name) { m_callbacks.erase(name); }
+
+	void HandleEvent(const sf::Event& event);
+	void Update();
+	sf::Vector2i GetMousePosition(sf::RenderWindow* wnd = nullptr) {
+		return wnd ? sf::Mouse::getPosition(*wnd)
+			: sf::Mouse::getPosition();
+	}
+};
+
 
 
