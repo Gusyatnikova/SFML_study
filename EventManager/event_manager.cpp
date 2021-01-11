@@ -110,9 +110,20 @@ void EventManager::Update() {
 			}
 		}
 		if (bind->m_events.size() == bind->m_events_occured) {
-			auto call_itr = m_callbacks.find(bind->m_name);
-			if (call_itr != m_callbacks.end()) {
-				call_itr->second(&bind->m_details);
+			auto stateCallbacks = m_callbacks.find(m_currentState);
+			//0 is invalid stateType, made for processing global callbacks from Window
+			auto otherCallbacks = m_callbacks.find(StateType(0));
+			if (stateCallbacks != m_callbacks.end()) {
+				auto callIt = stateCallbacks->second.find(bind->m_name);
+				if (callIt != stateCallbacks->second.end()) {
+					callIt->second(&bind->m_details);
+				}
+			}
+			if (otherCallbacks != m_callbacks.end()) {
+				auto callIt = otherCallbacks->second.find(bind->m_name);
+				if (callIt != otherCallbacks->second.end()) {
+					callIt->second(&bind->m_details);
+				}
 			}
 		}
 		bind->m_events_occured = 0;
@@ -156,4 +167,14 @@ void EventManager::LoadBindings() {
 		bind = nullptr;
 	}
 	bindings.close();
+}
+
+bool EventManager::RemoveCallback(
+	StateType state, const std::string &name) {
+	auto it = m_callbacks.find(state);
+	if (it == m_callbacks.end()) return false;
+	auto it1 = it->second.find(name);
+	if (it1 == it->second.end()) return false;
+	it->second.erase(name);
+	return true;
 }

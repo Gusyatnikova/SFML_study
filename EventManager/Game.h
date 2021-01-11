@@ -2,6 +2,7 @@
 #include "Window.h"
 #include "World.h"
 #include"textbox.h"
+#include "state_manager.h"
 
 class Game
 {
@@ -9,24 +10,17 @@ public:
 	Game();
 	~Game();
 
-	void HandleInput();
 	void Update();
+	void LateUpdate();
 	void Render();
-	void ShowGameOver();
 	Window* GetWindow();
 	sf::Time GetElapsed();
-	void RestartClock();
-	bool IsDone() const;
-	void MoveSprite(EventDetails *details);
 private:
+	SharedContext m_context;
 	Window m_window;
-	World m_world;
-	//Snake m_snake;
+	StateManager m_stateManager;
 	sf::Clock m_clock;
-	float m_elapsed;
-	TextBox m_textBox;
-	bool m_isDone;
-	sf::Texture m_texture;
-	sf::Sprite m_sprite;
+	sf::Time m_elapsed;
+	void RestartClock();
 };
 

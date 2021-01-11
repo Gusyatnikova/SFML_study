@@ -4,7 +4,6 @@
 #include <unordered_map>
 #include <string>
 #include <functional>
-
 #include "SFML/Graphics.hpp"
 
 enum class EventType {
@@ -34,7 +33,8 @@ struct EventInfo {
 
 using Events = std::vector<std::pair<EventType, EventInfo>>;
 
-struct EventDetails {
+class EventDetails {
+public:
 	EventDetails(const std::string& bindName) {
 		m_name = bindName;
 		Clear();
@@ -71,14 +71,20 @@ struct Binding {
 
 using Bindings = std::unordered_map<std::string, Binding*>;
 
+//eventName -> Callback func
+using CallbackContainer = std::unordered_map<
+	std::string, std::function<void(EventDetails*)>>;
+//for each state one map of callbacks
+enum class StateType;
 using Callbacks = std::unordered_map
-	<std::string, std::function<void(EventDetails*)>>;
+	<StateType, CallbackContainer>;
 
 class EventManager {
 private:
 	Bindings m_bindings;
 	Callbacks m_callbacks;
 	bool m_hasFocus;
+	StateType m_currentState;
 
 	void LoadBindings();
 public:
@@ -91,18 +97,20 @@ public:
 	void SetFocus(bool focus) { m_hasFocus = focus; }
 
 	template <typename T>
-	bool AddCallback(const std::string &name,
+	bool AddCallback(StateType state, const std::string &name,
 		void (T::*func)(EventDetails*), T* instance) {
+		auto it = m_callbacks.emplace(state, CallbackContainer()).first;
 		//бинд так управл€ет аргументами функции _1 означает первый параметр
 		//если foo(int, int) и f = bind(foo, 101, _1), то f(-10) = foo(101, -10)
 		//сколько указать заполнителей _num, столько и будет нужно аргументов при вызове f
 		auto tmp = std::bind(func, instance, std::placeholders::_1);
 		//emplace return std::pair<std::iterator, bool> 1-ый ук-ет на позицию вставленного эл-та
 		//или сущ-й эл-т если вставки не было. 2-й = 1, если вставка была, иначе 0
-		return m_callbacks.emplace(name, tmp).second;
+		//return m_callbacks.emplace(name, tmp).second;
+		return it->second.emplace(name, tmp).second;
 	}
 
-	void RemoveCallback(const std::string &name) { m_callbacks.erase(name); }
+	bool RemoveCallback(StateType state, const std::string &name);
 
 	void HandleEvent(const sf::Event& event);
 	void Update();
@@ -110,6 +118,7 @@ public:
 		return wnd ? sf::Mouse::getPosition(*wnd)
 			: sf::Mouse::getPosition();
 	}
+	void SetCurrentState(StateType state) { m_currentState = state; }
 };
 
 

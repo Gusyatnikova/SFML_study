@@ -20,10 +20,10 @@ void Window::Setup(const std::string& l_title, const sf::Vector2u& l_size) {
 	Create();
 	//m_window.setFramerateLimit(60);//60 FPS cap - max fpr in sec
 	m_isFocused = true;
-	m_eventManager.AddCallback("Fullscreen_toggle",
+	/*m_eventManager.AddCallback("Fullscreen_toggle",
 		&Window::ToggleFullScreen, this);
 	m_eventManager.AddCallback("Window_close",
-		&Window::Close, this);
+		&Window::Close, this);*/
 }
 
 void Window::Create() {
@@ -84,6 +84,8 @@ bool Window::IsFullScreen() const {
 	return m_isFullScreen;
 }
 
+bool Window::IsFocused() const { return m_isFocused; }
+
 void Window::Draw(sf::Drawable& l_drawable) {
 	m_window.draw(l_drawable);
 }
@@ -95,3 +97,5 @@ sf::Vector2u Window::GetWindowSize() const {
 sf::RenderWindow* Window::GetRenderWindow() {
 	return &m_window;
 }
+
+EventManager* Window::GetEventManager() { return &m_eventManager; }

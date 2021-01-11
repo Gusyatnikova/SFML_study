@@ -23,12 +23,10 @@ public:
 	sf::Vector2u GetWindowSize() const;
 	sf::RenderWindow* GetRenderWindow();
 
-	bool IsFocused() const { return m_isFocused; };
-	EventManager* GetEventManager() { return &m_eventManager; };
+	bool IsFocused() const;
+	EventManager* GetEventManager();
 	void ToggleFullScreen(EventDetails *details);
 	void Close(EventDetails *details = nullptr);
-
-	//void ToggleFulScreen();
 
 	void Draw(sf::Drawable& l_drawable);
 

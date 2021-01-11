@@ -2,10 +2,10 @@
 
 int main() {
 	Game game;
-	while (!game.IsDone()) {
-		game.HandleInput();
+	while (!game.GetWindow()->IsDone()) {
 		game.Update();
 		game.Render();
+		game.LateUpdate();
 	}
 	return 0;
 }
