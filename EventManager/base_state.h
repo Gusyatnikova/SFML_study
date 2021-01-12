@@ -1,10 +1,6 @@
 #pragma once
 #include "Window.h"
 
-enum class StateType {
-	Intro = 1, MainMenu, Game, Paused, GameOver, Credits
-};
-
 class StateManager;
 
 class BaseState {
@@ -23,9 +19,9 @@ public:
 		m_transparent(false), m_transcendent(false) {}
 	virtual ~BaseState() {}
 	//when state is created and pushed to the stack
-	virtual void onCreate() = 0;
+	virtual void OnCreate() = 0;
 	//when state is poped from the stack
-	virtual void onDestroy() = 0;
+	virtual void OnDestroy() = 0;
 	//called once a state is moved to the top of the stack
 	virtual void Activate() = 0;
 	//called once a state is removed from the top position
@@ -39,3 +35,4 @@ public:
 	bool IsTranscendent() const { return m_transcendent; }
 	StateManager* GetStateManager() { return m_stateManager; }
 };
+//p.115

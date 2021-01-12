@@ -1,6 +1,6 @@
 #pragma once
 #include "Window.h"
-#include "World.h"
+//#include "World.h"
 #include"textbox.h"
 #include "state_manager.h"
 

@@ -14,8 +14,8 @@ public:
 	//transition from Intro to MainMenu state 
 	//when time is over and space was pressed
 	void Continue(EventDetails*);
-	virtual void onCreate();
-	virtual void onDestroy();
+	virtual void OnCreate();
+	virtual void OnDestroy();
 	virtual void Activate() {}
 	virtual void Deactivate() {}
 	virtual void Update(const sf::Time &time);

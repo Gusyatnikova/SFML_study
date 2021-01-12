@@ -5,7 +5,11 @@
 #include "base_state.h"
 #include "shared_context.h"
 
-//map doesn't kep a stack-like order in container
+enum class StateType {
+	Intro = 1, MainMenu, Game, Paused, GameOver, Credits
+};
+
+//map doesn't keep a stack-like order in container
 using StateContainer = std::vector<std::pair<StateType, BaseState*>>;
 using TypeContainer = std::vector<StateType>;
 //function will generate a key type
@@ -13,7 +17,7 @@ using StateFactory = std::unordered_map<StateType, std::function<BaseState*()>>;
 
 class StateManager {
 private:
-	//will be created in Game class
+	//will be created in Game class 
 	SharedContext* m_shared;
 	StateContainer m_states;
 	//because cannot remove a state in random moment: we kept it is remove when it not used
