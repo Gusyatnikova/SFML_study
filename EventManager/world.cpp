@@ -1,4 +1,4 @@
-#include "world.h"
+#include "..\Headers\world.h"
 
 World::World(sf::Vector2u wnd_size) {
 	//m_blockSize = 16;

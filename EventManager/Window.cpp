@@ -1,4 +1,4 @@
-#include "Window.h"
+#include "..\Headers\Window.h"
 
 Window::Window() {
 	Setup("Window", sf::Vector2u(640, 480));
@@ -20,10 +20,10 @@ void Window::Setup(const std::string& l_title, const sf::Vector2u& l_size) {
 	Create();
 	//m_window.setFramerateLimit(60);//60 FPS cap - max fpr in sec
 	m_isFocused = true;
-	/*m_eventManager.AddCallback("Fullscreen_toggle",
+	m_eventManager.AddCallback(StateType(0), "Fullscreen_toggle",
 		&Window::ToggleFullScreen, this);
-	m_eventManager.AddCallback("Window_close",
-		&Window::Close, this);*/
+	m_eventManager.AddCallback(StateType(0), "Window_close",
+		&Window::Close, this);
 }
 
 void Window::Create() {
@@ -64,7 +64,7 @@ void Window::Close(EventDetails *details) { m_isDone = true;  }
 
 void Window::ToggleFullScreen(EventDetails *details) {
 	m_isFullScreen = !m_isFullScreen;
-	Destroy();
+	m_window.close();
 	Create();
 }
 

@@ -1,12 +1,12 @@
-#include "state_intro.h"
-#include "state_manager.h"
+#include "..\Headers\state_intro.h"
+#include "..\Headers\state_manager.h"
 
 State_Intro::State_Intro(StateManager *stateManager) 
 	: BaseState(stateManager) {}
 
 State_Intro::~State_Intro() {}
 
-void State_Intro::onCreate() {
+void State_Intro::OnCreate() {
 	m_timePassed = 0.0f;
 	sf::Vector2u windowSize = m_stateManager->GetContext()->
 		m_wnd->GetRenderWindow()->getSize();
@@ -30,7 +30,7 @@ void State_Intro::onCreate() {
 		&State_Intro::Continue, this);
 }
 
-void State_Intro::onDestroy() {
+void State_Intro::OnDestroy() {
 	EventManager *eventMangr = m_stateManager->GetContext()->m_eventManager;
 	eventMangr->RemoveCallback(StateType::Intro, "Intro_Continue");
 }

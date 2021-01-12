@@ -1,17 +1,20 @@
-#include "state_manager.h"
-#include "state_intro.h"
+#include "..\Headers\state_manager.h"
+#include "..\Headers\state_intro.h"
+#include "..\Headers\state_mainMenu.h"
+#include "..\Headers\state_game.h"
+#include "..\Headers\state_paused.h"
 
 StateManager::StateManager(SharedContext *context)
 	: m_shared(context) {
 	RegisterState<State_Intro>(StateType::Intro);
-	//RegisterState<State_MainMenu>(StateType::MainMenu);
-	//RegisterState<State_Game>(StateType::Game);
-	//RegisterState<State_Paused>(StateType::Paused);
+	RegisterState<State_MainMenu>(StateType::MainMenu);
+	RegisterState<State_Game>(StateType::Game);
+	RegisterState<State_Paused>(StateType::Paused);
 }
 
 StateManager::~StateManager() {
 	for (auto &it : m_states) {
-		it.second->onDestroy();
+		it.second->OnDestroy();
 		delete it.second;
 	}
 }
@@ -98,7 +101,7 @@ void StateManager::CreateState(const StateType &type) {
 	if (newState == m_stateFactory.end()) return;
 	BaseState *state = newState->second();
 	m_states.emplace_back(type, state);
-	state->onCreate();
+	state->OnCreate();
 }
 
 void StateManager::Remove(const StateType& l_type) {
@@ -108,7 +111,7 @@ void StateManager::Remove(const StateType& l_type) {
 void StateManager::RemoveState(const StateType &type) {
 	for (auto it = m_states.begin(); it != m_states.end(); ++it) {
 		if (it->first == type) {
-			it->second->onDestroy();
+			it->second->OnDestroy();
 			delete it->second;
 			m_states.erase(it);
 			return;
