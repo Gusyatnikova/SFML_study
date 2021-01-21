@@ -20,12 +20,14 @@ public:
 
 	void SetDirection(Direction dir);
 	Direction GetDirection() const;
+	Direction GetPhisicalDirection() const;
 	int GetSpeed() const;
 	sf::Vector2i GetPosition() const;
 	int GetLives() const;
 	int GetScore() const;
 	void IncreaseScore();
 	bool HasLost() const;
+	bool HasSegment(sf::Vector2i pos) const;
 
 	void Lose();
 	void ToggleLost();

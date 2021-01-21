@@ -3,14 +3,15 @@
 int main() {
 	Game game;
 	while (!game.IsDone()) {
-		game.HandleInput();
+		//game.HandleInput();
 		game.Update();
 		game.Render();
-		game.RestartClock();	
+		//game.RestartClock();	
+		game.LateUpdate();
 	}
-	while (!game.GetWindow()->IsDone()) {
+	/*while (!game.GetWindow()->IsDone()) {
 		game.ShowGameOver();
 		game.Update();
-	}
+	}*/
 	return 0;
 }

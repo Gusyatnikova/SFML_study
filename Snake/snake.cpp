@@ -3,7 +3,6 @@
 Snake::Snake(int blockSize) {
 	m_size = blockSize;
 	m_lives = 3;
-	//m_bodyRect.setSize({ 1.0f * (m_size - 1), 1.0f * (m_size - 1) });
 	m_bodyCircle.setRadius(1.0f * m_size / 2);
 	Reset();
 }
@@ -143,8 +142,10 @@ void Snake::CheckCollsion() {
 	SnakeSegment& head = *m_snake_body.begin();
 	for (auto it = std::next(m_snake_body.begin()); it != m_snake_body.end(); ++it) {
 		if (it->position == head.position) {
-			int segments_cnt = m_snake_body.end() - it;
-			Cut(segments_cnt);
+			//int segments_cnt = m_snake_body.end() - it;
+			//Cut(segments_cnt);
+			m_dir = Direction::NONE;
+			m_lost = true;
 			break;
 		}
 	}
@@ -153,32 +154,28 @@ void Snake::CheckCollsion() {
 void Snake::Cut(int segments_cnt) {
 	m_snake_body.erase(std::next(m_snake_body.begin(), segments_cnt), m_snake_body.end());
 	--m_lives;
-	//if (!m_lives) {
-	//	Lose();
-	//}
 }
 
 void Snake::Render(sf::RenderWindow& wnd) {
 	if (m_snake_body.empty()) return;
 	auto snake_head = m_snake_body.begin();
-	//m_bodyRect.setFillColor(sf::Color::Yellow);
 	m_bodyCircle.setFillColor(sf::Color::Yellow);
-	/*m_bodyRect.setPosition(
-		snake_head->position.x * m_size,
-		snake_head->position.y * m_size);
-	wnd.draw(m_bodyRect);*/
 	m_bodyCircle.setPosition(
 		snake_head->position.x * m_size,
 		snake_head->position.y * m_size);
 	wnd.draw(m_bodyCircle);
-	//m_bodyRect.setFillColor(sf::Color::Green);
 	m_bodyCircle.setFillColor(sf::Color::Green);
 	for (auto it = m_snake_body.begin() + 1; it != m_snake_body.end(); ++it) {
-		//m_bodyRect.setPosition(it->position.x * m_size, it->position.y * m_size);
-		//wnd.draw(m_bodyRect);
 		m_bodyCircle.setPosition(it->position.x * m_size, it->position.y * m_size);
 		wnd.draw(m_bodyCircle);
 	}
 	
 }
 
+bool Snake::HasSegment(sf::Vector2i pos) const {
+	for (auto &segment : m_snake_body) {
+		if (segment.position.x == pos.x &&
+			segment.position.y == pos.y) return true;
+	}
+	return false;
+}

@@ -22,7 +22,6 @@ private:
 	int m_blockSize;
 	int m_pic_size;
 	bool m_appleEaten;
-	//sf::CircleShape m_appleShape;
 	sf::Texture m_appleTexture;
 	sf::Sprite m_appleSprite;
 	sf::RectangleShape m_bounds[4];
@@ -30,4 +29,6 @@ private:
 	sf::Sprite m_grassSprite;
 	sf::Texture m_treeTexture;
 	sf::Sprite m_treeSprite;
+	void DrawGrid(sf::RenderWindow& window);
+	void DrawBorders(sf::RenderWindow& window);
 };
