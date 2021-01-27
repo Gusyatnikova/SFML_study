@@ -38,10 +38,11 @@ void EventManager::HandleEvent(const sf::Event &event) {
 			if (event_it.first != sfml_event) continue;
 			if (sfml_event == EventType::KeyUp ||
 				sfml_event == EventType::KeyDown) {
+				int code = event.key.code;
 				if (event_it.second.m_code == event.key.code) {
-					if (bind->m_details.m_keyCode != -1) {
+					//if (bind->m_details.m_keyCode != -1) {
 						bind->m_details.m_keyCode = event_it.second.m_code;
-					}
+					//}
 					++(bind->m_events_occured);
 					break;
 				}

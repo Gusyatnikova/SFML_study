@@ -1,11 +1,19 @@
 #pragma once
 #include "base_state.h"
+#include "World.h"
+#include"textbox.h"
 
 class State_Game : public BaseState{
 private:
-	sf::Texture m_texture;
-	sf::Sprite m_sprite;
-	sf::Vector2f m_increment;
+	Window* m_window;
+	World m_world;
+	Snake m_snake;
+	TextBox m_textBox;
+	bool m_isDone;
+	void ProcessInput(EventDetails* details);
+	float m_elapsed;
+	sf::Clock m_clock;
+	
 public:
 	State_Game(StateManager *state_manager);
 	~State_Game();

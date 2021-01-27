@@ -1,7 +1,5 @@
 #pragma once
 #include "Window.h"
-#include "World.h"
-#include"textbox.h"
 #include "state_manager.h"
 
 class Game
@@ -23,11 +21,8 @@ private:
 	Window m_window;
 	SharedContext m_context;
 	StateManager m_stateManager;
-	World m_world;
-	Snake m_snake;
+	
 	sf::Clock m_clock;
 	sf::Time m_elapsed;
-	TextBox m_textBox;
-	bool m_isDone;
 };
 

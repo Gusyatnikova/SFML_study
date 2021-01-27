@@ -1,18 +1,17 @@
-#include "state_mainMenu.h"
+#include "state_game_over.h"
 #include "state_manager.h"
 
+State_GameOver::State_GameOver(StateManager* manager)
+	: BaseState(manager) {}
 
-State_MainMenu::State_MainMenu(StateManager* stateManager)
-	: BaseState(stateManager) {}
+State_GameOver::~State_GameOver() {}
 
-State_MainMenu::~State_MainMenu() {}
-
-void State_MainMenu::OnCreate() {
+void State_GameOver::OnCreate() {
 	m_backgroundTexture.loadFromFile("..\\Source\\background.png");
 	m_backgroundSprite.setTexture(m_backgroundTexture);
 	m_font.loadFromFile("..\\Source\\LuckiestGuy.ttf");
 	m_text.setFont(m_font);
-	m_text.setString({ "SNAKE" });
+	m_text.setString({ "GAME OVER" });
 	m_text.setCharacterSize(70);
 	m_text.setFillColor(sf::Color(64, 191, 64));
 	m_text.setOutlineThickness(2.0f);
@@ -26,10 +25,10 @@ void State_MainMenu::OnCreate() {
 
 	sf::Vector2f buttonSize = sf::Vector2f(300.0f, 50.0f);
 	m_buttonPadding = buttonSize.y;
-	sf::Vector2f buttonPos = m_text.getPosition() + sf::Vector2f(0, 2.5f * m_buttonPadding);
+	sf::Vector2f buttonPos = m_text.getPosition() + sf::Vector2f(0, 4.0f * m_buttonPadding);
 
 	std::string str[ButtonsCnt] = {
-		"PLAY", "SETTINGS", "ABOUT", "EXIT" };
+		"RESTART", "EXIT" };
 
 	for (int i = 0; i < ButtonsCnt; ++i) {
 		sf::Vector2f buttonPosition(buttonPos.x,
@@ -41,68 +40,43 @@ void State_MainMenu::OnCreate() {
 		m_buttons[i].SetBackgroundColor(sf::Color(0, 0, 0, 0));
 		m_buttons[i].SetFont(m_font);
 		m_buttons[i].SetText(str[i]);
-		if (i == 1 || i == 2) {
-			m_buttons[i].SetTextColor(sf::Color(179, 179, 179, 126));
-		}
-		else {
-			m_buttons[i].SetTextColor(sf::Color(64, 191, 64, 255));
-		}
+		m_buttons[i].SetTextColor(sf::Color(64, 191, 64, 255));
 		m_buttons[i].SetCharacterSize(50);
 		m_buttons[i].SetTextLetterCpacing(3.0f);
 
 		m_buttons[i].CenterText();
 		m_buttons[i].SetTextOutlineThickness(2.0);
 	}
+	m_stateManager->Remove(StateType::Game);
 	EventManager* eventManager = m_stateManager->GetContext()->m_eventManager;
-	eventManager->AddCallback(StateType::MainMenu, "Mouse_Pressed",
-		&State_MainMenu::MouseClick, this);
-	eventManager->AddCallback(StateType::MainMenu, "Mouse_Moved",
-		&State_MainMenu::MouseMoved, this);
+	eventManager->AddCallback(StateType::GameOver, "Mouse_Pressed",
+		&State_GameOver::MouseClick, this);
+	eventManager->AddCallback(StateType::GameOver, "Mouse_Moved",
+		&State_GameOver::MouseMoved, this);
 }
-
-void State_MainMenu::OnDestroy() {
+void State_GameOver::OnDestroy() {
 	EventManager *eventManager = m_stateManager->GetContext()->m_eventManager;
-	eventManager->RemoveCallback(StateType::MainMenu, "Mouse_Pressed");
-	eventManager->RemoveCallback(StateType::MainMenu, "Mouse_Moved");
+	eventManager->RemoveCallback(StateType::GameOver, "Mouse_Pressed");
+	eventManager->RemoveCallback(StateType::GameOver, "Mouse_Moved");
 }
 
-void State_MainMenu::Activate() {
-	if (m_stateManager->HasState(StateType::Game)
-		&& m_buttons[0].GetText().getString() == "PLAY") {
-		m_buttons[0].SetText({ "RESUME" });
-		sf::FloatRect rect = m_buttons[0].GetText().getLocalBounds();
-		m_buttons[0].SetTextOrigin(sf::Vector2f(rect.left + rect.width / 2.0f,
-			rect.top + rect.height / 2.0f));
-	}
-}
-
-void State_MainMenu::MouseClick(EventDetails *details) {
+void State_GameOver::MouseClick(EventDetails *details) {
 	sf::Vector2i mousePos = details->m_mouse;
 	for (int i = 0; i < ButtonsCnt; ++i) {
 		if (m_buttons[i].IsInside(mousePos.x, mousePos.y)) {
 			if (i == 0) {
-				m_stateManager->SwitchTo(StateType::Game);
+				m_stateManager->SwitchTo(StateType::MainMenu);
 			}
-			//else if (i == 1) {
-				//settings
-			//}
-			else if (i == 2) {
-				//about
-				//?????	
-			}
-			else if (i == 3) {
+			else if (i == 1) {
 				m_stateManager->GetContext()->m_wnd->Close();
 			}
 		}
 	}
 }
 
-void State_MainMenu::MouseMoved(EventDetails *details) {
+void State_GameOver::MouseMoved(EventDetails *details) {
 	sf::Vector2i mousePos = details->m_mouse;
 	for (int i = 0; i < ButtonsCnt; ++i) {
-		if (i == 1 || i == 2) {
-			continue;
-		}
 		if (m_buttons[i].IsInside(mousePos.x, mousePos.y)) {
 			m_buttons[i].SetTextStyle(sf::Text::Style::Underlined);
 		}
@@ -112,7 +86,9 @@ void State_MainMenu::MouseMoved(EventDetails *details) {
 	}
 }
 
-void State_MainMenu::Draw() {
+void State_GameOver::Activate() { }
+
+void State_GameOver::Draw() {
 	sf::RenderWindow *window = m_stateManager->GetContext()->m_wnd->GetRenderWindow();
 	window->draw(m_backgroundSprite);
 	window->draw(m_text);
