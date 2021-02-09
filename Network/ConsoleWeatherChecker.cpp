@@ -9,6 +9,7 @@
 using uint = unsigned int;
 void ExtractMorningTemp(const std::string& src, std::vector<float>& dst, const std::pair<uint, uint>& range);
 std::string FloatToFormatStr(float num, uint d_after_dot);
+void GenerateOutput(const std::vector<float>& temperature, uint days);
 
 int main() {
 	sf::Http http("http://api.openweathermap.org");
@@ -24,15 +25,7 @@ int main() {
 		std::string response_str = response.getBody();
 		std::vector<float> temperature;
 		ExtractMorningTemp(response_str, temperature, { 0, days });
-		std::cout << "Morning forecast temperature in Novosibirsk(55" 
-			<< static_cast<char>(248) << ' ' << "N, "
-			<< "83" << static_cast<char>(248) << ' ' << "E):\n\n"
-			<< "Average temperature: " 
-			<< FloatToFormatStr(std::accumulate(temperature.begin(), temperature.end(), 0.0f) / days, 2) 
-			<< ' ' << static_cast<char>(248) << "C\n"
-			<< "Maximum temperature: " 
-			<< FloatToFormatStr(*std::max_element(temperature.begin(), temperature.end()), 2) 
-			<< ' ' << static_cast<char>(248) << "C\n";
+		GenerateOutput(temperature, days);
 	}
 	else {
 		std::cout << "Error occured: \n";
@@ -43,6 +36,8 @@ int main() {
 	return 0;
 }
 
+//-- Function's implementation --//
+
 void ExtractMorningTemp(const std::string& src, std::vector<float>& dst, const std::pair<uint, uint>& range) {
 	uint from = range.first;
 	uint to = range.second;
@@ -51,11 +46,23 @@ void ExtractMorningTemp(const std::string& src, std::vector<float>& dst, const s
 		pos = src.find("morn", pos);
 		std::string temp_str = src.substr(pos + 6, 6);
 		dst.push_back(std::stof(temp_str));
-		pos += 6;
+		pos += 75;
 	}
 }
 
 std::string FloatToFormatStr(float num, uint d_after_dot) {
 	std::string str = std::to_string(num);
 	return str.substr(0, str.find('.') + d_after_dot + 1);
+}
+
+void GenerateOutput(const std::vector<float>& temperature, uint days) {
+	std::cout << "Morning forecast temperature in Novosibirsk(55"
+		<< static_cast<char>(248) << ' ' << "N, "
+		<< "83" << static_cast<char>(248) << ' ' << "E):\n\n"
+		<< "Average temperature: "
+		<< FloatToFormatStr(std::accumulate(temperature.begin(), temperature.end(), 0.0f) / days, 2)
+		<< ' ' << static_cast<char>(248) << "C\n"
+		<< "Maximum temperature: "
+		<< FloatToFormatStr(*std::max_element(temperature.begin(), temperature.end()), 2)
+		<< ' ' << static_cast<char>(248) << "C\n";
 }
