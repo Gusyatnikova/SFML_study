@@ -16,7 +16,7 @@ int main() {
 	sf::Http::Request request;
 	request.setMethod(sf::Http::Request::Get);
 	const std::string request_str = "data/2.5/onecall?lat=55.031680&lon=82.928000&units=metric&"
-		"exclude=current,minutely,hourly,alerts&appid=762ee04723199b0dcfe3788fbeecb33b";
+		"exclude=current,minutely,hourly,alerts&appid={APPID}";
 	request.setUri(request_str);
 
 	sf::Http::Response response = http.sendRequest(request);
